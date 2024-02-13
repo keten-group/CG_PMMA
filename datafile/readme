@@ -1,1 +1,4 @@
 CG_PMMA_M100_150_chain.data - PMMA with CG beads generated using self-avoiding random walk algorithm. The system consists of 150 chain, each having 100 monomers.
+
+More details about the CG parameters can be found - 
+Hsu, David D., et al. "Systematic method for thermomechanically consistent coarse-graining: a universal model for methacrylate-based polymers." Journal of chemical theory and computation 10.6 (2014): 2514-2527.
