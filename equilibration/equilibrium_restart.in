@@ -14,9 +14,6 @@ variable ts equal 4
 bond_style     harmonic
 bond_coeff 1 105 2.735
 bond_coeff 2 39.86 3.658
-bond_coeff 3 39.86 4.658
-bond_coeff 4 500 2.8284
-bond_coeff 5 500 4
 
 # Angle parameters
 angle_style    		hybrid table linear 361 class2
@@ -33,7 +30,6 @@ pair_style lj/gromacs 7.0 10.0
 pair_coeff 1 1 0.5 5.5
 pair_coeff 1 2 0.866 4.96
 pair_coeff 2 2 1.5 4.42
-pair_coeff 3 3 0.5 2.525
 
 pair_modify mix arithmetic
 
