@@ -1,0 +1,99 @@
+
+# ----------------------------------
+## READ_RESTART
+# ----------------------------------
+read_restart restart/eq.restart
+
+
+# ----------------- Variable Definition -----------------
+variable steps_equ equal 5000000
+variable Temp equal 600000
+variable ts equal 4
+
+# ----------------- Settings Section -----------------
+bond_style     harmonic
+bond_coeff 1 105 2.735
+bond_coeff 2 39.86 3.658
+bond_coeff 3 39.86 4.658
+bond_coeff 4 500 2.8284
+bond_coeff 5 500 4
+
+# Angle parameters
+angle_style    		hybrid table linear 361 class2
+angle_coeff    		2 class2 96.83 9.8812 -15.1188 6.5889 #AAB
+angle_coeff    		2 class2 bb 0 0 0
+angle_coeff    		2 class2 ba 0 0 0 0
+angle_coeff    		1 table AAA_avg_potential_iter9_eAB.table Angle #AAA
+
+dihedral_style    multi/harmonic
+dihedral_coeff 1 4.38 0.8739 -0.3571 -0.2774 0.09312
+dihedral_coeff 2 4.519 -0.8859 -1.692 0.5625 0.9562
+
+pair_style lj/gromacs 7.0 10.0
+pair_coeff 1 1 0.5 5.5
+pair_coeff 1 2 0.866 4.96
+pair_coeff 2 2 1.5 4.42
+pair_coeff 3 3 0.5 2.525
+
+pair_modify mix arithmetic
+
+special_bonds lj 0.0 0.0 1.0
+
+# Define groups to use in simulation
+group           	np type 3
+group           	polymer type 1 2
+
+velocity np set 0.0 0.0 0.0
+
+# ----------------------------------
+## Neigh_list Calc Frequency
+# ----------------------------------
+neigh_modify delay 0 every 1 check yes
+
+# ----------------------------------
+## Saving Frequency (10 frames)
+# ----------------------------------
+variable ts_save equal floor(${steps_equ}*0.1)
+
+# ----------------------------------
+## DUMP
+# ----------------------------------
+dump 1 all custom ${ts_save} traj/eq_*.xyz type x y z ix iy iz
+dump_modify 1 first no sort id
+
+# ----------------------------------
+## FIX
+# ----------------------------------
+fix 1 all momentum 1000 linear 1 1 1 angular
+
+variable T equal ${Temp}/1000.0
+
+#fix 2 all npt temp ${T} ${T} 100.0 iso 1.0 1.0 1000.0
+
+fix 2 polymer nvt temp ${T} ${T} 100.0
+
+# ----------------------------------
+## THERMO_STYLE
+# ----------------------------------
+thermo_style custom step temp press pe ke etotal ebond eangle epair lx ly lz xlo xhi ylo yhi zlo zhi vol density dt time cpu tpcpu spcpu cpuremain
+
+# ----------------------------------
+## RUN_STYLE
+# ----------------------------------
+run_style verlet
+
+# ----------------------------------
+## EQUILIBRATION RUN
+# ----------------------------------
+timestep ${ts}
+thermo ${ts_save}
+run ${steps_equ}
+# ----------------------------------
+
+# ----------------------------------
+## WRITE_RESTART
+# ----------------------------------
+shell mkdir restart
+write_restart restart/eq.restart
+
+write_data eq.data nocoeff
