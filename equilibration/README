@@ -3,7 +3,9 @@ The equlibration of the CG PMMA is done through three steps.
 2. equilibrium_restart.in - Multiple long NVT cycles with truncated LJ potential are used to extend polymer chains.
 3. equilibrium_restart_1.in -  Multiple long NVT cycles with full LJ potential are used to extend polymer chains.
 
-Note - MSID of the polymer chains are used to establish adequate equilibration.
+Note - 
+MSID of the polymer chains are used to establish adequate equilibration. 
+Step 2 and 3 should run for 100-1000 ns, depending on the chain length.
 
 More details about the process can be found - 
 Wu, Zhenghao, Subhadeep Pal, and Sinan Keten. "Implicit Chain Particle Model for Polymer-Grafted Nanoparticles." Macromolecules 56.9 (2023): 3259-3271.
